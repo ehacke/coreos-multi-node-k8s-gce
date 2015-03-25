@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # SET ETCD VERSION TO BE USED !!!
-ETCD_RELEASE=v0.4.6
+ETCD_RELEASE=v2.0.5
 
 # SET FLEET VERSION TO BE USED !!!
-FLEET_RELEASE=v0.9.0
+FLEET_RELEASE=v0.9.1
 
 # SET KUBERNETES VERSION TO BE USED !!!
-k8s_version=v0.9.2
+k8s_version=v0.13.2
 
 ## change Google Cloud settings as per your requirements
 # GC settings
 
 # SET YOUR PROJECT AND ZONE !!!
-project=my-cloud-project
-zone=europe-west1-c
+project=groupby-cloud-1701
+zone=us-central1-a
 
 # CoreOS RELEASE CHANNEL
 channel=alpha
@@ -46,7 +46,7 @@ gcloud compute instances create $control_name \
 --project=$project --image=$image --image-project=coreos-cloud \
 --boot-disk-type=pd-ssd --boot-disk-size=10 --zone=$zone \
 --machine-type=$control_machine_type --metadata-from-file user-data=./cloud-config/control.yaml \
---can-ip-forward --scopes compute-rw --tags k8s-cluster
+--can-ip-forward --scopes compute-rw --tags k8s-cluster --network kubernachos
 
 # get control node internal IP
 control_node_ip=$(gcloud compute instances list --project=$project | grep -v grep | grep $control_name | awk {'print $4'});
@@ -72,6 +72,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     ./get_k8s_fleet_etcd_linux.sh
 else
     ./get_k8s_fleet_etcd_osx.sh
+fi
 
 # set binaries folder, fleet tunnel to control's external IP
 export PATH=${HOME}/k8s-bin:$PATH

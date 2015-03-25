@@ -6,7 +6,7 @@ ETCD_RELEASE=$(cat bootstrap_k8s_cluster.sh | grep ETCD_RELEASE= | head -1 | cut
 echo "Downloading etcdctl $ETCD_RELEASE for Linux"
 curl -L -o etcd.tar.gz "https://github.com/coreos/etcd/releases/download/$ETCD_RELEASE/etcd-$ETCD_RELEASE-linux-amd64.tar.gz"
 tar xzvf "etcd.tar.gz" "etcd-$ETCD_RELEASE-linux-amd64/etcdctl"
-mv -f etcdctl ~/k8s-bin
+mv etcd-$ETCD_RELEASE-linux-amd64/etcdctl ~/k8s-bin
 # clean up
 rm -f etcd.tar.gz
 echo "etcdctl was copied to ~/k8s-bin"
@@ -17,7 +17,7 @@ FLEET_RELEASE=$(cat bootstrap_k8s_cluster.sh | grep FLEET_RELEASE= | head -1 | c
 echo "Downloading fleetctl $FLEET_RELEASE for Linux"
 curl -L -o fleet.tar.gz "https://github.com/coreos/fleet/releases/download/$FLEET_RELEASE/fleet-$FLEET_RELEASE-linux-amd64.tar.gz"
 tar xzvf "fleet.tar.gz" "fleet-$FLEET_RELEASE-linux-amd64/fleetctl"
-mv -f fleetctl ~/k8s-bin
+mv fleet-$FLEET_RELEASE-linux-amd64/fleetctl ~/k8s-bin
 # clean up
 rm -f fleet.tar.gz
 echo "fleetctl was copied to ~/k8s-bin "
