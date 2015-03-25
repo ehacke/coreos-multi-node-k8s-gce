@@ -1,4 +1,5 @@
 #!/bin/bash
+ssh-add ~/.ssh/google_compute_engine &>/dev/null
 
 # Setup Client SSH Tunnels
 

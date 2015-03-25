@@ -1,4 +1,5 @@
 #!/bin/bash
+ssh-add ~/.ssh/google_compute_engine &>/dev/null
 
 # SET ETCD VERSION TO BE USED !!!
 ETCD_RELEASE=v2.0.5
@@ -31,15 +32,26 @@ control_name=k8s-control
 node_name=k8s-node
 ###
 
+echo "Removing previous config"
+rm -rf cloud-config/ > /dev/null 2>&1
+rm -rf fleet-units/ > /dev/null 2>&1
+
+echo "Creating new config"
+# prep new configs and units
+cp -rf raw-cloud-config/ cloud-config/
+cp -rf raw-fleet-units/ fleet-units/
+
 # get the latest full image name
 image=$(gcloud compute images list | grep -v grep | grep coreos-$channel | awk {'print $1'})
 
+echo "Modifying configs"
 # update cloud-configs with CoreOS release channel
 sed -i "" -e 's/GROUP/'$channel'/g' ./cloud-config/*.yaml
 # update fleet units with k8s version
 sed -i "" -e 's/k8s_version/'$k8s_version'/g' ./fleet-units/*.service
 #
 
+echo "Creating control machine"
 # CONTROL
 # create control node
 gcloud compute instances create $control_name \
