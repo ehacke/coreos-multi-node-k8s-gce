@@ -67,8 +67,11 @@ gcloud compute instances create $node_name-01 $node_name-02 \
 # update fleet units with control node's internal IP
 sed -i "" -e 's/CONTROL-NODE-INTERNAL-IP/'$control_node_ip'/g' ./fleet-units/*.service
 
-# download etcdctl, fleetctl and k8s binaries for OS X
-./get_k8s_fleet_etcd_osx.sh
+# download etcdctl, fleetctl and k8s binaries for OS X or Linux
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    ./get_k8s_fleet_etcd_linux.sh
+else
+    ./get_k8s_fleet_etcd_osx.sh
 
 # set binaries folder, fleet tunnel to control's external IP
 export PATH=${HOME}/k8s-bin:$PATH
